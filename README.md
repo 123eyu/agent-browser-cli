@@ -7,6 +7,7 @@
 浏览器感知 · 页面控制 · Chrome 登录态复用 · CDP · 条件等待 · Agent Skill 集成
 
 <p>
+  <a href="https://chrome.google.com/webstore/detail/lagdcijjomlmjdankfoejpnmcajpencl"><img src="https://img.shields.io/badge/Chrome_Web_Store-安装扩展-4285F4?logo=googlechrome&logoColor=white" alt="从 Chrome 应用商店安装扩展"></a>
   <a href="https://github.com/sleepinginsummer/agent-browser-cli"><img src="https://img.shields.io/badge/CLI-agentbrowsercli-2ea44f" alt="CLI agentbrowsercli"></a>
   <a href="https://github.com/sleepinginsummer/agent-browser-cli/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green" alt="License MIT"></a>
   <a href="https://github.com/sleepinginsummer/agent-browser-cli"><img src="https://img.shields.io/badge/sys-win%2Fmac%2Flinux-0078D6?labelColor=0078D6&color=C0C0C0" alt="sys win/mac/linux"></a>
@@ -28,7 +29,7 @@
 
 - 当前版本：`0.3.5`
 - 支持平台：Windows（包括 WSL）/ Mac / Linux
-- 浏览器：Chrome，需加载拓展 `assets/tmwd_cdp_bridge`
+- 浏览器：Chrome，推荐从 [Chrome 应用商店](https://chrome.google.com/webstore/detail/lagdcijjomlmjdankfoejpnmcajpencl) 安装扩展
 - Linux 支持前提：本机 Chrome / Chromium 需要支持安装扩展
 - WSL 支持前提：需使用 `WSL 2.0.0+`，并建议在 Windows `11 22H2+` 下启用 `networkingMode=mirrored`，以便 WSL 连接宿主机 `localhost` 上的 Chrome 桥接服务
 
@@ -117,7 +118,11 @@ cargo build --release
 
 ## Chrome 扩展
 
-1. 推荐从 [最新 Release](https://github.com/sleepinginsummer/agent-browser-cli/releases/latest) 下载 `chrome-extensions.zip`，下载后解压，Chrome 打开 `chrome://extensions`，开启“开发者模式”，点击“加载已解压的扩展程序”，选择解压后的 `tmwd_cdp_bridge` 目录。
+推荐从 [Chrome 应用商店安装扩展](https://chrome.google.com/webstore/detail/lagdcijjomlmjdankfoejpnmcajpencl)，点击“添加至 Chrome”即可。
+
+也可以手动安装：
+
+1. 从 [最新 Release](https://github.com/sleepinginsummer/agent-browser-cli/releases/latest) 下载 `chrome-extensions.zip`，下载后解压，Chrome 打开 `chrome://extensions`，开启“开发者模式”，点击“加载已解压的扩展程序”，选择解压后的 `tmwd_cdp_bridge` 目录。
 
 2. 本地源码构建时，也可以直接加载扩展目录：
 

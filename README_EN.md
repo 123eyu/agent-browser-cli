@@ -7,6 +7,7 @@ A browser perception and control CLI for agents, turning a real Chrome session i
 Browser perception · Page control · Chrome session reuse · CDP · Conditional wait · Agent Skill integration
 
 <p>
+  <a href="https://chrome.google.com/webstore/detail/lagdcijjomlmjdankfoejpnmcajpencl"><img src="https://img.shields.io/badge/Chrome_Web_Store-Install_Extension-4285F4?logo=googlechrome&logoColor=white" alt="Install from the Chrome Web Store"></a>
   <a href="https://github.com/sleepinginsummer/agent-browser-cli"><img src="https://img.shields.io/badge/CLI-agentbrowsercli-2ea44f" alt="CLI agentbrowsercli"></a>
   <a href="https://github.com/sleepinginsummer/agent-browser-cli/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green" alt="License MIT"></a>
   <a href="https://github.com/sleepinginsummer/agent-browser-cli"><img src="https://img.shields.io/badge/sys-win%2Fmac%2Flinux-0078D6?labelColor=0078D6&color=C0C0C0" alt="sys win/mac/linux"></a>
@@ -28,7 +29,7 @@ This project is not Selenium or Playwright. It is better suited for helping agen
 
 - Current version: `0.3.5`
 - Supported platforms: Windows (including WSL) / Mac / Linux
-- Browser: Chrome, with the `assets/tmwd_cdp_bridge` extension loaded
+- Browser: Chrome, with the extension installed from the [Chrome Web Store](https://chrome.google.com/webstore/detail/lagdcijjomlmjdankfoejpnmcajpencl) (recommended)
 - Linux prerequisite: the local Chrome / Chromium build must support loading extensions
 - WSL prerequisite: use `WSL 2.0.0+`, and preferably enable `networkingMode=mirrored` on Windows `11 22H2+` so WSL can reach the host Chrome bridge service on `localhost`
 
@@ -117,7 +118,11 @@ cargo build --release
 
 ## Chrome Extension
 
-1. Recommended: download `chrome-extensions.zip` from the [latest Release](https://github.com/sleepinginsummer/agent-browser-cli/releases/latest), extract it, open `chrome://extensions` in Chrome, enable `Developer mode`, click `Load unpacked`, and select the extracted `tmwd_cdp_bridge` directory.
+Recommended: [install the extension from the Chrome Web Store](https://chrome.google.com/webstore/detail/lagdcijjomlmjdankfoejpnmcajpencl) by clicking **Add to Chrome**.
+
+Alternatively, install it manually:
+
+1. Download `chrome-extensions.zip` from the [latest Release](https://github.com/sleepinginsummer/agent-browser-cli/releases/latest), extract it, open `chrome://extensions` in Chrome, enable `Developer mode`, click `Load unpacked`, and select the extracted `tmwd_cdp_bridge` directory.
 
 2. When building from local source, you can also load this extension directory directly:
 
