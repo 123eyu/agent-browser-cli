@@ -178,7 +178,9 @@ async function handleCookies(msg, sender) {
       const tab = await chrome.tabs.get(msg.tabId);
       url = tab.url;
     }
-    const origin = url.match(/^https?:\/\/[^\/]+/)[0];
+    const originMatch = url?.match(/^https?:\/\/[^\/]+/);
+    if (!originMatch) throw new Error(`仅支持 http(s) 页面的 Cookie: ${url || '(无 URL)'}`);
+    const origin = originMatch[0];
     const all = await chrome.cookies.getAll({ url });
     const part = await chrome.cookies.getAll({ url, partitionKey: { topLevelSite: origin } }).catch(() => []);
     const merged = [...all];

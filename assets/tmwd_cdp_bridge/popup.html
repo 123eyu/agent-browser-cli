@@ -3,45 +3,151 @@
 <head>
 <meta charset="utf-8">
 <style>
-body{width:420px;max-height:560px;margin:0;padding:8px;font:12px monospace;background:#1e1e1e;color:#d4d4d4;overflow-y:auto}
-h3{margin:4px 0;color:#569cd6}
-button{background:#264f78;color:#fff;border:none;padding:4px 12px;cursor:pointer;border-radius:3px;margin-bottom:6px}
-button:hover{background:#37699e}
-input{width:86px;background:#252526;color:#d4d4d4;border:1px solid #3c3c3c;border-radius:3px;padding:4px;font:12px monospace}
-label{display:inline-flex;align-items:center;gap:6px;margin-right:6px}
-#profileLabel{width:150px}
-.panel{margin-bottom:8px;padding:6px;background:#252526;border-radius:3px}
-.row{display:flex;align-items:center;gap:6px;margin-top:6px}
-.status{color:#9cdcfe}
-.error{color:#f48771}
-pre{white-space:pre-wrap;word-break:break-all;margin:0;padding:6px;background:#252526;border-radius:3px;max-height:420px;overflow-y:auto}
+:root{
+  --bg:#f7f7f8;--surface:#fff;--surface-2:#f1f1f3;--border:#e4e4e7;
+  --text:#18181b;--muted:#71717a;--accent:#2563eb;--accent-hover:#1d4ed8;
+  --ok:#16a34a;--ok-bg:#dcfce7;--bad:#dc2626;--bad-bg:#fee2e2;--warn:#b45309;--warn-bg:#fef3c7;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#18181b;--surface:#212124;--surface-2:#2a2a2e;--border:#34343a;
+    --text:#ececef;--muted:#9a9aa3;--accent:#3b82f6;--accent-hover:#60a5fa;
+    --ok:#4ade80;--ok-bg:#14532d66;--bad:#f87171;--bad-bg:#7f1d1d66;--warn:#fbbf24;--warn-bg:#78350f66;
+  }
+}
+*{box-sizing:border-box}
+body{width:380px;margin:0;background:var(--bg);color:var(--text);font:13px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:5px 10px;white-space:nowrap}
+button:hover{background:var(--surface-2)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.primary:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+button.link{border:none;background:none;color:var(--accent);padding:0}
+button.link:hover{text-decoration:underline;background:none}
+input{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 8px;min-width:0}
+input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
+
+/* header */
+header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--border)}
+header img{width:22px;height:22px}
+header .title{font-weight:600;flex:1}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:2px 9px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.bad{background:var(--bad-bg);color:var(--bad)}
+.pill.warn{background:var(--warn-bg);color:var(--warn)}
+
+/* tabs */
+nav{display:flex;gap:4px;padding:8px 14px 0;background:var(--surface);border-bottom:1px solid var(--border)}
+nav button{border:none;border-bottom:2px solid transparent;border-radius:0;background:none;color:var(--muted);padding:6px 8px 8px}
+nav button:hover{background:none;color:var(--text)}
+nav button.active{color:var(--text);border-bottom-color:var(--accent);font-weight:600}
+nav .count{font-size:11px;color:var(--muted);font-weight:400;margin-left:2px}
+
+main{padding:12px 14px 14px;max-height:470px;overflow-y:auto}
+.view[hidden]{display:none}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:10px}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid var(--border);font-weight:600}
+.card-body{padding:10px 12px}
+.kv{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 0}
+.kv + .kv{border-top:1px dashed var(--border)}
+.kv .k{color:var(--muted);flex-shrink:0}
+.kv .v{text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mono{font-family:var(--mono);font-size:12px}
+.form-row{display:flex;gap:6px;margin-top:8px}
+.form-row input{flex:1}
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
+.msg{font-size:12px;margin-top:6px}
+.msg:empty{display:none}
+.msg.ok{color:var(--ok)}
+.msg.bad{color:var(--bad)}
+.notice{display:flex;gap:8px;align-items:flex-start;font-size:12px;padding:8px 10px;border-radius:6px;background:var(--warn-bg);color:var(--warn);margin-top:8px}
+.notice[hidden]{display:none}
+details summary{cursor:pointer;color:var(--muted);font-size:12px;margin-top:6px;user-select:none}
+details .kv .v{cursor:copy}
+
+/* cookies */
+.toolbar{display:flex;gap:6px;margin-bottom:8px}
+.toolbar input{flex:1}
+.site{font-size:12px;color:var(--muted);margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cookie{padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);margin-bottom:6px;cursor:copy}
+.cookie:hover{border-color:var(--accent)}
+.cookie .name{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:12px;font-weight:600}
+.cookie .name span:first-child{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cookie .val{font-family:var(--mono);font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+.tag{font-size:10px;font-family:var(--mono);font-weight:500;padding:0 5px;border-radius:4px;background:var(--surface-2);color:var(--muted)}
+.empty{text-align:center;color:var(--muted);padding:24px 0}
+.legend{font-size:11px;color:var(--muted);margin-top:4px}
+
+.toast{position:fixed;left:50%;bottom:12px;transform:translateX(-50%) translateY(20px);opacity:0;transition:.18s;background:var(--text);color:var(--bg);font-size:12px;padding:5px 12px;border-radius:999px;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
 </style>
 </head>
 <body>
-<h3>🔌 Bridge</h3>
-<div class="panel">
-  <div id="bridgeStatus" class="status">读取连接状态...</div>
-  <div id="fileAccessStatus" class="status">读取文件网址权限...</div>
-  <div class="row">
-    <label>端口 <input id="port" type="number" min="1" max="65535"></label>
-    <button id="savePort">保存并重连</button>
-  </div>
-  <div id="portMsg"></div>
-</div>
-<h3>👤 Profile</h3>
-<div class="panel">
-  <div id="profileStatus" class="status">读取 Profile...</div>
-  <div class="row">
-    <label>Label <input id="profileLabel" type="text" maxlength="40" placeholder="work"></label>
-    <button id="saveProfileLabel">保存</button>
-    <button id="clearProfileLabel">清空</button>
-  </div>
-  <div id="profileMsg"></div>
-  <div class="status">建议用 CLI 设置 label，可校验跨 Profile 唯一性。</div>
-</div>
-<h3>🍪 Cookies</h3>
-<button id="refresh">刷新</button>
-<pre id="out">点击刷新获取 cookies...</pre>
+<header>
+  <img src="icons/bot-32.png" alt="">
+  <div class="title">Agent Browser Bridge</div>
+  <span id="connPill" class="pill">读取中</span>
+</header>
+
+<nav>
+  <button data-tab="status" class="active">连接</button>
+  <button data-tab="cookies">Cookies <span id="cookieCount" class="count"></span></button>
+</nav>
+
+<main>
+  <section id="view-status" class="view">
+    <div class="card">
+      <div class="card-head">Bridge</div>
+      <div class="card-body">
+        <div class="kv"><span class="k">WebSocket</span><span id="wsUrl" class="v mono">-</span></div>
+        <div class="kv"><span class="k">文件网址访问</span><span id="filePill" class="pill">-</span></div>
+        <div id="fileNotice" class="notice" hidden>
+          <span>未启用时无法控制 file:// 页面。<button id="openExtPage" class="link">去扩展详情页开启 →</button></span>
+        </div>
+        <div class="form-row">
+          <input id="port" type="number" min="1" max="65535" placeholder="端口">
+          <button id="savePort" class="primary">保存并重连</button>
+        </div>
+        <div id="portMsg" class="msg"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">Profile</div>
+      <div class="card-body">
+        <div class="kv"><span class="k">Label</span><span id="labelView" class="v">-</span></div>
+        <div class="form-row">
+          <input id="profileLabel" type="text" maxlength="40" placeholder="例如 work">
+          <button id="saveProfileLabel" class="primary">保存</button>
+          <button id="clearProfileLabel">清空</button>
+        </div>
+        <div id="profileMsg" class="msg"></div>
+        <div class="hint">建议用 CLI 设置 label，可校验跨 Profile 唯一性。</div>
+        <details>
+          <summary>标识符（点击复制）</summary>
+          <div class="kv"><span class="k">Profile ID</span><span id="profileId" class="v mono" title="">-</span></div>
+          <div class="kv"><span class="k">Browser ID</span><span id="browserId" class="v mono" title="">-</span></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-cookies" class="view" hidden>
+    <div id="cookieSite" class="site">-</div>
+    <div class="toolbar">
+      <input id="cookieFilter" type="search" placeholder="筛选名称或值">
+      <button id="refresh">刷新</button>
+      <button id="copyAll" class="primary">复制全部</button>
+    </div>
+    <div id="out"><div class="empty">加载中...</div></div>
+    <div class="legend">点击单条复制 name=value · H=HttpOnly · S=Secure · P=Partitioned</div>
+  </section>
+</main>
+
+<div id="toast" class="toast"></div>
 <script src="popup.js"></script>
 </body>
 </html>
